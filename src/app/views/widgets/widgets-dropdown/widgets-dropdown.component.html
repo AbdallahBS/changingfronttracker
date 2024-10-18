@@ -1,0 +1,42 @@
+<c-row class="g-4">
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a
+      color="primary"
+      [title]="'العدد الجملي للتلاميد'"
+    >
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ elevesCount }}
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a
+      [title]="'العدد الجملي للمديرين'"
+      color="primary"
+    >
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ adminsCount }}
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a
+      [title]="'مجموع الأساتدة'"
+      color="primary"
+    >
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ enseignantsCount }}
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+  <c-col sm="6" xl="3">
+    <c-widget-stat-a
+      [title]="'مجموع الأقسام'"
+      color="primary"
+    >
+      <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
+        {{ classesCount }}
+      </ng-template>
+    </c-widget-stat-a>
+  </c-col>
+</c-row>

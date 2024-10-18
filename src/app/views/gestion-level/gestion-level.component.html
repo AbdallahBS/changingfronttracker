@@ -1,0 +1,159 @@
+<c-col xs="12">
+  <c-card class="mb-4">
+    <c-card-header>
+      <strong>إدارة الأقسام</strong>
+    </c-card-header>
+    <c-card-body>
+      <!-- Header with Add and Search -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <button type="button" class="btn btn-primary btn-elegant" (click)="showForm = !showForm">
+            إضافة قسم
+          </button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <!-- Search by Name -->
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="بحث بالاسم..." [(ngModel)]="searchName"
+              (ngModelChange)="filterClasses()">
+          </div>
+
+          <!-- Class Name Filter -->
+          <div class="form-group">
+            <select class="form-control" [(ngModel)]="selectedClassName" (change)="filterClasses()">
+              <option value="">اختر اسم المستوى</option>
+              <option *ngFor="let cls of classes" [value]="cls.nomDeClasse">{{ cls.nomDeClasse }}</option>
+            </select>
+          </div>
+
+          <!-- Level Filter -->
+          <div class="form-group">
+            <select class="form-control" [(ngModel)]="selectedLevel" (change)="filterClasses()">
+              <option value="">اختر المستوى</option>
+              <option value="7">المستوى 7</option>
+              <option value="8">المستوى 8</option>
+              <option value="9">المستوى 9</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rest of your component remains unchanged -->
+      <!-- Add Class Form -->
+      <div *ngIf="showForm || selectedClassId" class="mb-4">
+        <form (ngSubmit)="onSubmit()" #classForm="ngForm">
+          <div class="col-md-3 mb-3">
+            <label for="niveau" class="form-label">المستوى</label>
+            <select id="niveau" name="niveau" [(ngModel)]="classData.niveau" class="form-select" required>
+              <option value="" disabled selected>اختر المستوى</option>
+              <option value="7">سابعة أساسي</option>
+              <option value="8">ثامنة أساسي</option>
+              <option value="9">تاسعة أساسي</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="nomDeClasse">اسم المستوى</label>
+            <input type="text" id="nomDeClasse" class="form-control" [(ngModel)]="classData.nomDeClasse"
+              name="nomDeClasse" required>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid #f8f9fa; margin-top: 1rem; margin-bottom: 1rem;">
+          <div class="text-end">
+            <button type="submit" class="btn btn-success" [disabled]="classForm.invalid || isSubmitting">
+              {{ selectedClassId ? 'تحديث' : 'إضافة' }}
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">إلغاء</button>
+          </div>
+          <div *ngIf="newEntryExist" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+            <div style="
+              background-color: #f8d7da; 
+              color: #721c24; 
+              border: 1px solid #f5c6cb; 
+              padding: 15px; 
+              border-radius: 5px; 
+              display: flex; 
+              justify-content: space-between; 
+              align-items: center; 
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+              transition: opacity 0.5s ease;">
+              <span style="margin-right: 10px;">{{ 'GESTIONCLASSE.ROWEXIST' | translate }}</span>
+              <button style="
+                background: none; 
+                border: none; 
+                color: #721c24; 
+                font-size: 20px; 
+                cursor: pointer;">
+                &times;
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Table and other content remain unchanged -->
+      <!-- Conditionally display the classes table or enseignants/students -->
+      <div *ngIf="!showEnseignants && !showStudents">
+        <!-- Table for Classes -->
+        <table class="table align-middle mb-0 bg-white">
+          <thead class="bg-light">
+            <tr>
+              <th>المستوى</th>
+              <th>اسم المستوى</th>
+              <th>عدد الطلاب</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cls of filteredClasses">
+              <td>{{ cls.niveau }}</td>
+              <td>{{ cls.nomDeClasse }}</td>
+              <td>{{ cls.studentCount }}</td>
+              <td>
+                <button type="button" class="btn btn-sm btn-outline-secondary me-2" (click)="editClass(cls)">تعديل</button>
+                <button type="button" class="btn btn-sm btn-outline-danger"
+                  (click)="deleteClasse(cls.id)">حذف</button>
+                    &nbsp;
+                <button type="button" class="btn btn-sm btn-outline-secondary me-2"
+                  (click)="viewEnseignants(cls.id); showStudents = false; showEnseignants = true;">
+                  عرض المدرسين
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary me-2"
+                  (click)="viewStudents(cls.id)">
+                  عرض التلاميذ
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+      
+
+      </div>
+      <div *ngIf="showStudents && classData.students.length > 0">
+        <h5> {{ classData.nomDeClasse }} قائمة التلاميذ _ قسم </h5> <!-- Display class name here -->
+        <div class="mb-3">
+          <button type="button" class="btn btn-secondary me-2" (click)="printStudents()">طباعة</button>
+          <button type="button" class="btn btn-secondary" (click)="exportToPDF()">تصدير PDF</button>
+      </div>
+      <table id="studentsTable" class="table table-bordered">
+        <thead>
+            <tr>
+              <th>الإسم</th>
+              <th>اللقب</th>
+             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of classData.students">
+              <td>{{ student.nom }}</td>
+              <td>{{ student.prenom }}</td>
+             <!-- Format the creation date -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </c-card-body>
+  </c-card>
+</c-col>

@@ -1,0 +1,57 @@
+<!-- src/app/dashboard/dashboard.component.html -->
+
+
+<app-widgets-dropdown />
+<c-card class="my-4">
+
+  
+</c-card>
+
+<app-widgets-brand [withCharts]="true" />
+
+
+
+<c-row>
+  <c-col xs>
+    <c-card class="mb-4">
+      <c-card-body>
+        <table [hover]="true" [responsive]="true" [striped]="true" align="middle" cTable class="mb-0 border">
+          <thead class="text-nowrap text-truncate">
+            <tr>
+              <th class="bg-body-tertiary text-center">
+                <svg cIcon name="cilPeople"></svg>
+              </th>
+              <th class="bg-body-tertiary">إسم المدير</th>
+              <th class="bg-body-tertiary text-center">الرتبة</th>
+              <th class="bg-body-tertiary">النشاط</th>
+              <th class="bg-body-tertiary text-center">التوقيت</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td class="text-center">
+                <c-avatar [size]="'md'" src="{{ user.avatar }}"  />
+              </td>
+              <td>
+                <div>{{ user.name }}</div>
+              </td>
+              <td class="text-center">
+                <div>{{ user.role }}</div>
+              </td>
+              <td>
+                <div class="d-flex justify-content-between">
+                  <div class="float-start">
+                    <div>{{ user.activity }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="text-center">
+                <div>{{ user.time }}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
